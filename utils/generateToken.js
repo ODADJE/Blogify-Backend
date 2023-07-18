@@ -9,7 +9,7 @@ const generateToken = (user) => {
   };
 
   //sign the token with a secret key
-  return (token = jwt.sign(payload, "anykey", {
+  return (token = jwt.sign(payload, process.env.JWT_KEY, {
     expiresIn: 36000, // Expires 1hr
   }));
 };

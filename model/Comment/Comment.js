@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const commentSchema = new mongoose.Schema(
   {
-    text: {
+    message: {
       type: String,
       required: true,
     },
@@ -15,7 +15,7 @@ const commentSchema = new mongoose.Schema(
       ref: "User",
     },
 
-    postsId: {
+    postId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
       required: true,

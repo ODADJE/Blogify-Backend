@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const crypto = require("crypto");
 
 // Schema
 
@@ -59,6 +60,7 @@ const userSchema = new mongoose.Schema(
     },
     profileViewers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     likedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
@@ -79,6 +81,21 @@ const userSchema = new mongoose.Schema(
     timestamp: true,
   }
 );
+//!Generate password reset token
+userSchema.methods.generatePasswordResetToken = function () {
+  //generate the token
+  const resetToken = crypto.randomBytes(20).toString("hex");
+  //Assingn the token to passwordResetToken field
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  //Update the passwordResetExpires and when to expire
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000; //! 10 minutes
+
+  return resetToken;
+};
 
 // compile schema to model
 
